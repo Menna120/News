@@ -4,7 +4,7 @@
     <style name="Theme.News" parent="android:Theme.Material.NoActionBar"/>
 
     <style name="Theme.News.SplashScreen" parent="Theme.SplashScreen">
-        <item name="android:colorAccent">@color/black</item>
+        <item name="android:colorAccent">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_news_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.News</item>
     </style>
