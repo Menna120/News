@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">News</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="back">Back</string>
+    <string name="open_drawer">Open Drawer</string>
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+    <string name="general">General</string>
+    <string name="business">Business</string>
+    <string name="sports">Sports</string>
+    <string name="technology">Technology</string>
+    <string name="entertainment">Entertainment</string>
+    <string name="health">Health</string>
+    <string name="science">Science</string>
+    <string name="clear">Clear</string>
 </resources>

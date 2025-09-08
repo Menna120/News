@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">أخبار</string>
+    <string name="home">الرئيسية</string>
+    <string name="search">بحث</string>
+    <string name="back">رجوع</string>
+    <string name="open_drawer">فتح القائمة</string>
+    <string name="theme">المظهر</string>
+    <string name="language">اللغة</string>
+    <string name="general">عام</string>
+    <string name="business">أعمال</string>
+    <string name="sports">رياضة</string>
+    <string name="technology">تكنولوجيا</string>
+    <string name="entertainment">ترفيه</string>
+    <string name="health">صحة</string>
+    <string name="science">علوم</string>
+    <string name="clear">مسح</string>
+</resources>

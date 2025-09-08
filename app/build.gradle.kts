@@ -1,7 +1,8 @@
 plugins {
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -53,11 +54,18 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
-    //Splash Screen
+    // Splash Screen
     implementation(libs.androidx.core.splashscreen)
 
-    //Google Fonts
+    // Google Fonts
     implementation(libs.androidx.compose.ui.text.google.fonts)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // JSON serialization
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.appcompat)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
