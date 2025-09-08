@@ -1,47 +1,41 @@
-package com.example.news.ui.drawer
+package com.example.news.ui.news_app
 
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.news.R
-import com.example.news.navigation.AppNavHost
-import com.example.news.navigation.CategoryNews
-import com.example.news.navigation.Home
-import com.example.news.navigation.Search
 import com.example.news.ui.components.NewsAppBar
+import com.example.news.ui.components.NewsDrawer
+import com.example.news.ui.navigation.AppNavHost
+import com.example.news.ui.navigation.CategoryNews
+import com.example.news.ui.navigation.Home
+import com.example.news.ui.navigation.Search
 import com.example.news.ui.theme.NewsTheme
-import com.example.news.utils.AppPreferences
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsAppContent(
-    initialTheme: String,
-    initialLanguageCode: String
+fun NewsApp(
+    viewModel: NewsAppViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    var themePreference by remember { mutableStateOf(initialTheme) }
-    var languagePreferenceCode by remember { mutableStateOf(initialLanguageCode) }
-    var appBarSearchQuery by remember { mutableStateOf("") }
+    val themePreference by viewModel.themePreference.collectAsState()
+    val languagePreferenceCode by viewModel.languagePreferenceCode.collectAsState()
+    val appBarSearchQuery by viewModel.appBarSearchQuery.collectAsState()
 
     NewsTheme(themePreference = themePreference) {
         val navController = rememberNavController()
@@ -62,22 +56,18 @@ fun NewsAppContent(
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet(
-                    drawerState = drawerState,
-                    drawerContainerColor = MaterialTheme.colorScheme.background,
-                    drawerContentColor = MaterialTheme.colorScheme.onBackground
-                ) {
-                    NewsDrawerContent(
-                        navController = navController,
-                        currentThemePreference = themePreference,
-                        onThemePreferenceChanged = { newPreference ->
-                            themePreference = newPreference
-                            AppPreferences.saveThemePreference(context, newPreference)
-                        },
-                        currentLanguageCode = languagePreferenceCode,
-                        onCloseDrawer = { scope.launch { drawerState.close() } }
-                    )
-                }
+                NewsDrawer(
+                    navController = navController,
+                    currentThemePreference = themePreference,
+                    onThemePreferenceChanged = { viewModel.updateThemePreference(it) },
+                    currentLanguageCode = languagePreferenceCode,
+                    onLanguagePreferenceChanged = { newLanguageCode ->
+                        viewModel.updateLanguagePreferenceCode(
+                            newLanguageCode
+                        )
+                    },
+                    onCloseDrawer = { scope.launch { drawerState.close() } }
+                )
             }
         ) {
             Scaffold(
@@ -87,7 +77,7 @@ fun NewsAppContent(
                         title = topBarTitle,
                         isCurrentSearchRoute = currentRoute == Search::class.qualifiedName,
                         onMenuClick = { scope.launch { drawerState.open() } },
-                        onSendSearchQueryClick = { appBarSearchQuery = it },
+                        onSendSearchQueryClick = { query -> viewModel.updateAppBarSearchQuery(query) },
                         onSearchNavigate = { navController.navigate(Search) }
                     )
                 }

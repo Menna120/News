@@ -1,4 +1,4 @@
-package com.example.news.navigation
+package com.example.news.ui.navigation
 
 import kotlinx.serialization.Serializable
 

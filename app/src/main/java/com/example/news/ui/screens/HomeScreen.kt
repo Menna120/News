@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.news.R
-import com.example.news.navigation.CategoryNews
+import com.example.news.ui.navigation.CategoryNews
 
 data class Category(@param:StringRes val name: Int, @param:DrawableRes val iconResId: Int)
 

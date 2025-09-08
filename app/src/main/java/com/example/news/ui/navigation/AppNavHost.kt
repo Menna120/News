@@ -1,4 +1,4 @@
-package com.example.news.navigation
+package com.example.news.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

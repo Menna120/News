@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.news.R
-import com.example.news.navigation.CategoryNews
+import com.example.news.ui.navigation.CategoryNews
 import com.example.news.ui.theme.NewsTheme
 
 // 1. Data class for News Article
