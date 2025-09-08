@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
@@ -33,7 +34,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppContent(
+fun NewsAppContent(
     initialTheme: String,
     initialLanguageCode: String
 ) {
@@ -61,8 +62,12 @@ fun MainAppContent(
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet {
-                    AppDrawerContent(
+                ModalDrawerSheet(
+                    drawerState = drawerState,
+                    drawerContainerColor = MaterialTheme.colorScheme.background,
+                    drawerContentColor = MaterialTheme.colorScheme.onBackground
+                ) {
+                    NewsDrawerContent(
                         navController = navController,
                         currentThemePreference = themePreference,
                         onThemePreferenceChanged = { newPreference ->

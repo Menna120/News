@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.news.ui.drawer.MainAppContent
+import com.example.news.ui.drawer.NewsAppContent
 import com.example.news.utils.AppPreferences
 
 class MainActivity : ComponentActivity() {
@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         val initialLanguageCode = AppPreferences.getLanguagePreference(this)
 
         setContent {
-            MainAppContent(
+            NewsAppContent(
                 initialTheme = initialTheme,
                 initialLanguageCode = initialLanguageCode
             )

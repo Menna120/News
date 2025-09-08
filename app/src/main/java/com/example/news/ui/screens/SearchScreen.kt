@@ -39,7 +39,7 @@ fun SearchScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // OutlinedTextField has been moved to the TopAppBar in MainAppContent.kt
+        // OutlinedTextField has been moved to the TopAppBar in NewsAppContent.kt
         // Spacer(modifier = Modifier.height(16.dp)) // Original spacer might not be needed or adjusted
 
         if (currentQuery.isNotBlank() && searchResults.isEmpty()) {
