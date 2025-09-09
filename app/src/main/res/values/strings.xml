@@ -14,4 +14,9 @@
     <string name="health">Health</string>
     <string name="science">Science</string>
     <string name="clear">Clear</string>
+    <string name="good_morning">Good Morning</string>
+    <string name="good_afternoon">Good Afternoon</string>
+    <string name="good_evening">Good Evening</string>
+    <string name="home_intro">Here is Some News For You</string>
+    <string name="view_all">View All</string>
 </resources>

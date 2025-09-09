@@ -7,8 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.news.ui.screens.CategoryNewsScreen
-import com.example.news.ui.screens.HomeScreen
 import com.example.news.ui.screens.SearchScreen
+import com.example.news.ui.screens.home.HomeScreen
 
 @Composable
 fun AppNavHost(

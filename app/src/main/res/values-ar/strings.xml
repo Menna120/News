@@ -15,4 +15,9 @@
     <string name="health">صحة</string>
     <string name="science">علوم</string>
     <string name="clear">مسح</string>
+    <string name="good_morning">صباح الخير</string>
+    <string name="good_afternoon">مساء الخير</string>
+    <string name="good_evening">مساء الخير</string>
+    <string name="home_intro">إليك بعض الأخبار</string>
+    <string name="view_all">عرض الكل</string>
 </resources>
