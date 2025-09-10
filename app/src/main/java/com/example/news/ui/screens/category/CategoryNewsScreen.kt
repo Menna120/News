@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -33,9 +35,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +53,7 @@ import com.example.news.R
 import com.example.news.data.NewsArticle
 import com.example.news.data.NewsArticle.Companion.getSampleNewsForCategory
 import com.example.news.ui.theme.NewsTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -59,32 +62,25 @@ fun CategoryNewsScreen(
     modifier: Modifier = Modifier,
     onFullArticleNavigate: (String) -> Unit
 ) {
-    val allArticles = remember(categoryName) {
-        getSampleNewsForCategory(categoryName)
-    }
+    val allArticles = remember(categoryName) { getSampleNewsForCategory(categoryName) }
+    val scope = rememberCoroutineScope()
     val sources = remember(allArticles) { allArticles.map { it.source }.distinct() }
-    var selectedSourceIndex by remember { mutableIntStateOf(0) }
-
-    val filteredArticles = if (sources.isNotEmpty()) {
-        allArticles.filter { it.source == sources[selectedSourceIndex] }
-    } else {
-        emptyList()
-    }
+    val pagerState = rememberPagerState(pageCount = { sources.size })
     var showSheet by remember { mutableStateOf(false) }
     var selectedArticle by remember { mutableStateOf<NewsArticle?>(null) }
 
     Column(modifier = modifier.fillMaxSize()) {
         if (sources.isNotEmpty()) {
             ScrollableTabRow(
-                selectedTabIndex = selectedSourceIndex,
+                selectedTabIndex = pagerState.currentPage,
                 modifier = Modifier.fillMaxWidth(),
                 containerColor = MaterialTheme.colorScheme.background,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 edgePadding = 16.dp,
                 indicator = { tabPositions ->
                     TabRowDefaults.PrimaryIndicator(
-                        modifier = Modifier.tabIndicatorOffset(tabPositions[selectedSourceIndex]),
-                        width = tabPositions[selectedSourceIndex].contentWidth,
+                        modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
+                        width = tabPositions[pagerState.currentPage].contentWidth,
                         color = MaterialTheme.colorScheme.onBackground,
                         shape = RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp)
                     )
@@ -93,28 +89,38 @@ fun CategoryNewsScreen(
             ) {
                 sources.forEachIndexed { index, source ->
                     Tab(
-                        selected = selectedSourceIndex == index,
-                        onClick = { selectedSourceIndex = index },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
                         text = {
                             Text(
                                 text = source,
-                                style = if (selectedSourceIndex == index) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall
+                                style = if (pagerState.currentPage == index) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall
                             )
                         }
                     )
                 }
             }
-        }
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(filteredArticles, key = { it.id }) { article ->
-                NewsArticleItem(article) {
-                    selectedArticle = article
-                    showSheet = true
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.fillMaxSize()
+            ) { page ->
+                val filteredArticles = allArticles.filter { it.source == sources[page] }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(filteredArticles, key = { it.id }) { article ->
+                        NewsArticleItem(article) {
+                            selectedArticle = article
+                            showSheet = true
+                        }
+                    }
                 }
             }
         }
@@ -201,7 +207,7 @@ fun CategoryNewsScreenPreview() {
 @Composable
 fun NewsArticleItemPreview() {
     val article = NewsArticle(
-        id = "preview-1", // Changed to String
+        id = "preview-1",
         title = "Sample Article Title: A Long Title That Might Wrap to Multiple Lines",
         source = "Sample News Source",
         time = "10 minutes ago",

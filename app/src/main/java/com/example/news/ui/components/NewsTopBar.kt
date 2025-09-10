@@ -51,7 +51,6 @@ fun NewsTopBar(
                         navController.navigate(Search) {
                             launchSingleTop = true
                             restoreState = true
-
                         }
                     }
                 ) {

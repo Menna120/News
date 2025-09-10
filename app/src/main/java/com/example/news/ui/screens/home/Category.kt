@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import com.example.news.R
 
 data class Category(
-    @param:StringRes val name: Int,
-    @param:DrawableRes val iconResId: Int
+    @field:StringRes val name: Int,
+    @field:DrawableRes val iconResId: Int
 )
 
 val categories = listOf(
