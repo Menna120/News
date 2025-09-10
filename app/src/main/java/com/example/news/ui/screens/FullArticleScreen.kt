@@ -1,9 +1,9 @@
 package com.example.news.ui.screens
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,15 +17,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun FullArticleScreen(
     url: String,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+    val webView = remember { WebView(context) }
     var isLoading by remember { mutableStateOf(true) }
 
     Scaffold(modifier = modifier.fillMaxSize()) { paddingValues ->
@@ -36,8 +38,7 @@ fun FullArticleScreen(
         ) {
             AndroidView(
                 factory = { context ->
-                    WebView(context).apply {
-                        settings.javaScriptEnabled = true
+                    webView.apply {
                         webViewClient = object : WebViewClient() {
                             override fun onPageStarted(
                                 view: WebView?,
@@ -58,8 +59,13 @@ fun FullArticleScreen(
                 },
                 modifier = Modifier.fillMaxSize()
             )
+
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+
+            BackHandler(enabled = webView.canGoBack()) {
+                webView.goBack()
             }
         }
     }
