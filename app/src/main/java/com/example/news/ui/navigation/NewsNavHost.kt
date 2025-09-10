@@ -6,12 +6,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.news.ui.screens.CategoryNewsScreen
+import com.example.news.ui.screens.FullArticleScreen
 import com.example.news.ui.screens.SearchScreen
+import com.example.news.ui.screens.category.CategoryNewsScreen
 import com.example.news.ui.screens.home.HomeScreen
 
 @Composable
-fun AppNavHost(
+fun NewsNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     searchQueryFromMain: String
@@ -26,7 +27,14 @@ fun AppNavHost(
         }
         composable<CategoryNews> { backStackEntry ->
             val categoryNews: CategoryNews = backStackEntry.toRoute()
-            CategoryNewsScreen(categoryNews = categoryNews)
+            CategoryNewsScreen(
+                categoryName = categoryNews.categoryName,
+                navController = navController
+            )
+        }
+        composable<FullArticle> { backStackEntry ->
+            val fullArticle: FullArticle = backStackEntry.toRoute()
+            FullArticleScreen(url = fullArticle.articleUrl)
         }
         composable<Search> { backStackEntry ->
             SearchScreen(

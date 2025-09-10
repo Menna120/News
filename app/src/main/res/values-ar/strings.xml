@@ -20,4 +20,6 @@
     <string name="good_evening">مساء الخير</string>
     <string name="home_intro">إليك بعض الأخبار</string>
     <string name="view_all">عرض الكل</string>
+    <string name="no_content_available">لا يوجد محتوى متاح</string>
+    <string name="view_full_article">عرض المقالة كاملة</string>
 </resources>

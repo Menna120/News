@@ -9,4 +9,7 @@ data object Home
 data class CategoryNews(val categoryName: String)
 
 @Serializable
+data class FullArticle(val articleUrl: String)
+
+@Serializable
 data object Search

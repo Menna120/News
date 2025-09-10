@@ -11,11 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.news.R
+import com.example.news.ui.theme.NewsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsAppBar(
+fun NewsTopBar(
     title: String,
     isCurrentSearchRoute: Boolean,
     modifier: Modifier = Modifier,
@@ -27,7 +29,7 @@ fun NewsAppBar(
         modifier = modifier,
         title = {
             if (isCurrentSearchRoute)
-                NewsSearchBar(onSendSearchQueryClick)
+                NewsSearchBar { onSendSearchQueryClick(it) }
             else Text(title)
         },
         navigationIcon = {
@@ -51,4 +53,19 @@ fun NewsAppBar(
             }
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun NewsTopBarPreview() {
+    NewsTheme {
+        NewsTopBar(
+            title = "News App",
+            isCurrentSearchRoute = false,
+            onMenuClick = {},
+            onSendSearchQueryClick = {},
+            onSearchNavigate = {}
+        )
+    }
 }

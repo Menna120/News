@@ -19,11 +19,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.news.R
-import com.example.news.ui.components.NewsAppBar
 import com.example.news.ui.components.NewsDrawer
-import com.example.news.ui.navigation.AppNavHost
+import com.example.news.ui.components.NewsTopBar
 import com.example.news.ui.navigation.CategoryNews
+import com.example.news.ui.navigation.FullArticle
 import com.example.news.ui.navigation.Home
+import com.example.news.ui.navigation.NewsNavHost
 import com.example.news.ui.navigation.Search
 import com.example.news.ui.theme.NewsTheme
 import kotlinx.coroutines.launch
@@ -68,21 +69,27 @@ fun NewsApp(
                     },
                     onCloseDrawer = { scope.launch { drawerState.close() } }
                 )
-            }
+            },
+            gesturesEnabled = currentRoute != FullArticle::class.qualifiedName + "/{articleUrl}"
         ) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
-                    NewsAppBar(
-                        title = topBarTitle,
-                        isCurrentSearchRoute = currentRoute == Search::class.qualifiedName,
-                        onMenuClick = { scope.launch { drawerState.open() } },
-                        onSendSearchQueryClick = { query -> viewModel.updateAppBarSearchQuery(query) },
-                        onSearchNavigate = { navController.navigate(Search) }
-                    )
+                    if (currentRoute != FullArticle::class.qualifiedName + "/{articleUrl}")
+                        NewsTopBar(
+                            title = topBarTitle,
+                            isCurrentSearchRoute = currentRoute == Search::class.qualifiedName,
+                            onMenuClick = { scope.launch { drawerState.open() } },
+                            onSendSearchQueryClick = { query ->
+                                viewModel.updateAppBarSearchQuery(
+                                    query
+                                )
+                            },
+                            onSearchNavigate = { navController.navigate(Search) }
+                        )
                 }
             ) { innerPadding ->
-                AppNavHost(
+                NewsNavHost(
                     navController = navController,
                     modifier = Modifier.padding(innerPadding),
                     searchQueryFromMain = appBarSearchQuery

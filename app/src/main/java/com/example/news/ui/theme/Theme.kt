@@ -19,12 +19,14 @@ import com.example.news.utils.THEME_SYSTEM
 
 private val DarkColorScheme = darkColorScheme(
     background = Black,
-    onBackground = White
+    onBackground = White,
+    outline = Gray
 )
 
 private val LightColorScheme = lightColorScheme(
     background = White,
-    onBackground = Black
+    onBackground = Black,
+    outline = Gray
 )
 
 @Composable

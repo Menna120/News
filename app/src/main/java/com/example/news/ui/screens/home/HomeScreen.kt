@@ -72,7 +72,10 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
                 category = category,
                 index = index
             ) {
-                navController.navigate(CategoryNews(categoryName = categoryName))
+                navController.navigate(CategoryNews(categoryName = categoryName)) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
         }
     }

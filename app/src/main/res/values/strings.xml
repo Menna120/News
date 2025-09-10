@@ -19,4 +19,6 @@
     <string name="good_evening">Good Evening</string>
     <string name="home_intro">Here is Some News For You</string>
     <string name="view_all">View All</string>
+    <string name="no_content_available">No Content Available</string>
+    <string name="view_full_article">View Full Article</string>
 </resources>

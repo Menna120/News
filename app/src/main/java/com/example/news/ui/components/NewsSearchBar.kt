@@ -15,12 +15,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.news.R
+import com.example.news.ui.theme.NewsTheme
 
 @Composable
 fun NewsSearchBar(
-    onSendSearchQueryClick: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onSendSearchQueryClick: (String) -> Unit
 ) {
     var query by remember { mutableStateOf("") }
     OutlinedTextField(
@@ -48,4 +50,10 @@ fun NewsSearchBar(
         modifier = modifier.fillMaxWidth(),
         singleLine = true
     )
+}
+
+@Preview
+@Composable
+fun NewsSearchBarPreview() {
+    NewsTheme { NewsSearchBar {} }
 }

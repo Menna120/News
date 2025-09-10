@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.news.data.NewsArticle.Companion.getSampleNewsForCategory
+import com.example.news.ui.screens.category.NewsArticleItem
 import com.example.news.ui.theme.NewsTheme
 
 @Composable
@@ -47,7 +49,7 @@ fun SearchScreen(
         } else if (searchResults.isNotEmpty()) {
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(searchResults) { article ->
-                    NewsArticleItem(article = article)
+                    NewsArticleItem(article = article) {}
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
