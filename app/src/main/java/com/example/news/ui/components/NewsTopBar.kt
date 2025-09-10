@@ -12,18 +12,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.news.R
-import com.example.news.ui.theme.NewsTheme
+import com.example.news.ui.navigation.Search
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewsTopBar(
     title: String,
+    navController: NavController,
     isCurrentSearchRoute: Boolean,
     modifier: Modifier = Modifier,
     onMenuClick: () -> Unit,
-    onSendSearchQueryClick: (String) -> Unit,
-    onSearchNavigate: () -> Unit
+    onSendSearchQueryClick: (String) -> Unit
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -44,7 +46,15 @@ fun NewsTopBar(
         },
         actions = {
             if (!isCurrentSearchRoute) {
-                IconButton(onClick = onSearchNavigate) {
+                IconButton(
+                    onClick = {
+                        navController.navigate(Search) {
+                            launchSingleTop = true
+                            restoreState = true
+
+                        }
+                    }
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_search),
                         contentDescription = stringResource(id = R.string.search)
@@ -65,13 +75,11 @@ fun NewsTopBar(
 @Preview
 @Composable
 fun NewsTopBarPreview() {
-    NewsTheme {
-        NewsTopBar(
-            title = "News App",
-            isCurrentSearchRoute = false,
-            onMenuClick = {},
-            onSendSearchQueryClick = {},
-            onSearchNavigate = {}
-        )
-    }
+    NewsTopBar(
+        title = "News App",
+        navController = rememberNavController(),
+        isCurrentSearchRoute = false,
+        onMenuClick = {},
+        onSendSearchQueryClick = {}
+    )
 }

@@ -39,7 +39,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.news.R
 import com.example.news.ui.navigation.Home
-import com.example.news.ui.theme.NewsTheme
 import com.example.news.utils.THEME_DARK
 import com.example.news.utils.THEME_LIGHT
 import com.example.news.utils.THEME_SYSTEM
@@ -134,6 +133,7 @@ fun NewsDrawer(
                     navController.navigate(Home) {
                         launchSingleTop = true
                         restoreState = true
+                        popUpTo(navController.graph.startDestinationId)
                     }
                     onCloseDrawer()
                 }
@@ -267,14 +267,13 @@ fun NewsDrawer(
 @Composable
 fun AppDrawerContentPreview() {
     val navController = rememberNavController()
-    NewsTheme {
-        NewsDrawer(
-            navController = navController,
-            currentThemePreference = THEME_SYSTEM,
-            onThemePreferenceChanged = {},
-            currentLanguageCode = "en",
-            onLanguagePreferenceChanged = {},
-            onCloseDrawer = {}
-        )
-    }
+
+    NewsDrawer(
+        navController = navController,
+        currentThemePreference = THEME_SYSTEM,
+        onThemePreferenceChanged = {},
+        currentLanguageCode = "en",
+        onLanguagePreferenceChanged = {},
+        onCloseDrawer = {}
+    )
 }

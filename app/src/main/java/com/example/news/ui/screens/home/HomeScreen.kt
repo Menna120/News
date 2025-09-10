@@ -31,15 +31,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.news.R
-import com.example.news.ui.navigation.CategoryNews
 import com.example.news.ui.theme.NewsTheme
 import java.util.Calendar
 
 @Composable
-fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onCategoryNavigate: (String) -> Unit
+) {
     LazyColumn(
         modifier = modifier.padding(top = 8.dp),
         contentPadding = PaddingValues(16.dp),
@@ -67,16 +67,11 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
         }
 
         itemsIndexed(categories) { index, category ->
-            val categoryName = stringResource(category.name)
             CategoryItem(
                 category = category,
-                index = index
-            ) {
-                navController.navigate(CategoryNews(categoryName = categoryName)) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
+                index = index,
+                onItemClick = onCategoryNavigate
+            )
         }
     }
 }
@@ -84,9 +79,8 @@ fun HomeScreen(navController: NavController, modifier: Modifier = Modifier) {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun HomeScreenPreview() {
-    val navController = rememberNavController()
     NewsTheme {
-        HomeScreen(navController = navController)
+        HomeScreen {}
     }
 }
 

@@ -22,25 +22,41 @@ fun NewsNavHost(
         startDestination = Home,
         modifier = modifier
     ) {
+
         composable<Home> {
-            HomeScreen(navController = navController)
+            HomeScreen { categoryName ->
+                navController.navigate(CategoryNews(categoryName)) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         }
+
         composable<CategoryNews> { backStackEntry ->
             val categoryNews: CategoryNews = backStackEntry.toRoute()
-            CategoryNewsScreen(
-                categoryName = categoryNews.categoryName,
-                navController = navController
-            )
+            CategoryNewsScreen(categoryName = categoryNews.categoryName) { articleUrl ->
+                navController.navigate(FullArticle(articleUrl)) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         }
+
         composable<FullArticle> { backStackEntry ->
-            val fullArticle: FullArticle = backStackEntry.toRoute()
-            FullArticleScreen(url = fullArticle.articleUrl)
+            val article: FullArticle = backStackEntry.toRoute()
+
+            FullArticleScreen(article.articleUrl)
         }
+
         composable<Search> { backStackEntry ->
-            SearchScreen(
-                navController = navController,
-                searchQuery = searchQueryFromMain
-            )
+            SearchScreen(searchQueryFromMain) { articleUrl ->
+                navController.navigate(
+                    FullArticle(articleUrl)
+                ) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
         }
     }
 }

@@ -46,21 +46,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.news.R
 import com.example.news.data.NewsArticle
 import com.example.news.data.NewsArticle.Companion.getSampleNewsForCategory
-import com.example.news.ui.navigation.FullArticle
 import com.example.news.ui.theme.NewsTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CategoryNewsScreen(
     categoryName: String,
-    navController: NavController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onFullArticleNavigate: (String) -> Unit
 ) {
     val allArticles = remember(categoryName) {
         getSampleNewsForCategory(categoryName)
@@ -133,7 +130,7 @@ fun CategoryNewsScreen(
             contentWindowInsets = { WindowInsets.safeContent }
         ) {
             Card(
-                modifier = modifier // Changed: Used the modifier from parameters
+                modifier = modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
@@ -170,10 +167,7 @@ fun CategoryNewsScreen(
                     )
                     Button(
                         onClick = {
-                            navController.navigate(FullArticle(selectedArticle!!.articleUrl)) {
-                                launchSingleTop = true
-                                restoreState = true
-                            }
+                            onFullArticleNavigate(selectedArticle!!.articleUrl)
                             showSheet = false
                         },
                         modifier = Modifier.fillMaxWidth(),
@@ -198,10 +192,8 @@ fun CategoryNewsScreen(
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun CategoryNewsScreenPreview() {
-    val navController = rememberNavController()
-
     NewsTheme {
-        CategoryNewsScreen(categoryName = "Technology", navController = navController)
+        CategoryNewsScreen(categoryName = "Technology") {}
     }
 }
 

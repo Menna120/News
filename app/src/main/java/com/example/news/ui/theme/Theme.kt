@@ -57,7 +57,6 @@ fun NewsTheme(
         WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !useDarkTheme
     }
 
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

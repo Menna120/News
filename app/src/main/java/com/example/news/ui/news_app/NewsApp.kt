@@ -1,6 +1,5 @@
 package com.example.news.ui.news_app
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
@@ -31,29 +30,26 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewsApp(
-    viewModel: NewsAppViewModel = hiltViewModel()
-) {
+fun NewsApp(viewModel: NewsAppViewModel = hiltViewModel()) {
+
     val themePreference by viewModel.themePreference.collectAsState()
     val languagePreferenceCode by viewModel.languagePreferenceCode.collectAsState()
     val appBarSearchQuery by viewModel.appBarSearchQuery.collectAsState()
 
+    val navController = rememberNavController()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentBackStackEntry?.destination?.route
+
+    val topBarTitle = when (currentRoute) {
+        Home::class.qualifiedName -> stringResource(id = R.string.home)
+        CategoryNews::class.qualifiedName + "/{categoryName}" -> currentBackStackEntry!!.toRoute<CategoryNews>().categoryName
+        else -> stringResource(id = R.string.app_name)
+    }
+
     NewsTheme(themePreference = themePreference) {
-        val navController = rememberNavController()
-        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-        val scope = rememberCoroutineScope()
-
-        val currentBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = currentBackStackEntry?.destination?.route
-
-        Log.d("MainAppContent", currentRoute.toString())
-
-        val topBarTitle = when (currentRoute) {
-            Home::class.qualifiedName -> stringResource(id = R.string.home)
-            CategoryNews::class.qualifiedName + "/{categoryName}" -> currentBackStackEntry!!.toRoute<CategoryNews>().categoryName
-            else -> stringResource(id = R.string.app_name)
-        }
-
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -62,11 +58,7 @@ fun NewsApp(
                     currentThemePreference = themePreference,
                     onThemePreferenceChanged = { viewModel.updateThemePreference(it) },
                     currentLanguageCode = languagePreferenceCode,
-                    onLanguagePreferenceChanged = { newLanguageCode ->
-                        viewModel.updateLanguagePreferenceCode(
-                            newLanguageCode
-                        )
-                    },
+                    onLanguagePreferenceChanged = { viewModel.updateLanguagePreferenceCode(it) },
                     onCloseDrawer = { scope.launch { drawerState.close() } }
                 )
             },
@@ -75,18 +67,15 @@ fun NewsApp(
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
-                    if (currentRoute != FullArticle::class.qualifiedName + "/{articleUrl}")
+                    if (currentRoute != FullArticle::class.qualifiedName + "/{articleUrl}") {
                         NewsTopBar(
                             title = topBarTitle,
+                            navController = navController,
                             isCurrentSearchRoute = currentRoute == Search::class.qualifiedName,
                             onMenuClick = { scope.launch { drawerState.open() } },
-                            onSendSearchQueryClick = { query ->
-                                viewModel.updateAppBarSearchQuery(
-                                    query
-                                )
-                            },
-                            onSearchNavigate = { navController.navigate(Search) }
+                            onSendSearchQueryClick = { viewModel.updateAppBarSearchQuery(it) }
                         )
+                    }
                 }
             ) { innerPadding ->
                 NewsNavHost(
