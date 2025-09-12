@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 private const val TAG = "GetSourceNewsUseCase"
 
-class GetSourceNewsUseCase @Inject constructor(
+class GetSourceArticlesUseCase @Inject constructor(
     private val repo: NewsRepository
 ) {
     operator fun invoke(
@@ -23,7 +23,7 @@ class GetSourceNewsUseCase @Inject constructor(
             Log.d(TAG, "Fetching news for source: $sourceId, page: $page, pageSize: $pageSize")
             emit(NewsResult.Loading())
             val response =
-                repo.getSourceNews(
+                repo.getSourceArticles(
                     sourceId = sourceId,
                     page = page,
                     pageSize = pageSize

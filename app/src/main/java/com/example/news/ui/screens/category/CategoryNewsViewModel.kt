@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.news.domain.model.Article
 import com.example.news.domain.model.NewsResult
 import com.example.news.domain.usecase.GetCategorySourcesUseCase
-import com.example.news.domain.usecase.GetSourceNewsUseCase
+import com.example.news.domain.usecase.GetSourceArticlesUseCase
 import com.example.news.ui.screens.category.model.CategoryNewsUiState
 import com.example.news.ui.screens.category.model.SourceArticlesUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ private const val PAGE_SIZE = 5
 class CategoryNewsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getCategorySourcesUseCase: GetCategorySourcesUseCase,
-    private val getSourceNewsUseCase: GetSourceNewsUseCase
+    private val getSourceArticlesUseCase: GetSourceArticlesUseCase
 ) : ViewModel() {
 
     private val categoryName: String = savedStateHandle.get<String>("categoryName") ?: ""
@@ -107,66 +107,65 @@ class CategoryNewsViewModel @Inject constructor(
                 currentState.copy(articlesBySource = updatedMap)
             }
 
-            getSourceNewsUseCase(
+            getSourceArticlesUseCase(
                 sourceId,
                 page = nextPage,
                 pageSize = PAGE_SIZE
-            )
-                .collectLatest { result ->
-                    val currentArticlesMap = _uiState.value.articlesBySource
-                    val sourceStateToUpdate =
-                        currentArticlesMap[sourceId] ?: SourceArticlesUiState()
+            ).collectLatest { result ->
+                val currentArticlesMap = _uiState.value.articlesBySource
+                val sourceStateToUpdate =
+                    currentArticlesMap[sourceId] ?: SourceArticlesUiState()
 
 
-                    when (result) {
-                        is NewsResult.Success -> {
-                            val articlesPageData = result.data
-                            val newArticles =
-                                articlesPageData?.articles?.mapNotNull { it.validateArticle() }
-                                    ?: emptyList()
-                            val totalResultsForSource = articlesPageData?.totalArticles ?: 0
+                when (result) {
+                    is NewsResult.Success -> {
+                        val articlesPageData = result.data
+                        val newArticles =
+                            articlesPageData?.articles?.mapNotNull { it.validateArticle() }
+                                ?: emptyList()
+                        val totalResultsForSource = articlesPageData?.totalArticles ?: 0
 
-                            val updatedArticles =
-                                if (isInitialLoad) newArticles else sourceStateToUpdate.articles + newArticles
-                            _uiState.update { currentState ->
-                                val updatedMap = currentState.articlesBySource.toMutableMap()
-                                updatedMap[sourceId] = sourceStateToUpdate.copy(
-                                    articles = updatedArticles,
-                                    isLoading = false,
-                                    currentPage = nextPage,
-                                    allArticlesLoaded = updatedArticles.size >= totalResultsForSource || newArticles.isEmpty(),
-                                    totalArticles = totalResultsForSource
-                                )
-                                currentState.copy(articlesBySource = updatedMap)
-                            }
-                        }
-
-                        is NewsResult.Error -> {
-                            _uiState.update { currentState ->
-                                val updatedMap = currentState.articlesBySource.toMutableMap()
-                                updatedMap[sourceId] = sourceStateToUpdate.copy(
-                                    isLoading = false,
-                                    errorMessage = result.message ?: "Error fetching articles"
-                                )
-                                currentState.copy(articlesBySource = updatedMap)
-                            }
-                        }
-
-                        is NewsResult.NetworkError -> {
-                            _uiState.update { currentState ->
-                                val updatedMap = currentState.articlesBySource.toMutableMap()
-                                updatedMap[sourceId] = sourceStateToUpdate.copy(
-                                    isLoading = false,
-                                    errorMessage = "Network error. Please check your connection."
-                                )
-                                currentState.copy(articlesBySource = updatedMap)
-                            }
-                        }
-
-                        is NewsResult.Loading -> {
+                        val updatedArticles =
+                            if (isInitialLoad) newArticles else sourceStateToUpdate.articles + newArticles
+                        _uiState.update { currentState ->
+                            val updatedMap = currentState.articlesBySource.toMutableMap()
+                            updatedMap[sourceId] = sourceStateToUpdate.copy(
+                                articles = updatedArticles,
+                                isLoading = false,
+                                currentPage = nextPage,
+                                allArticlesLoaded = updatedArticles.size >= totalResultsForSource || newArticles.isEmpty(),
+                                totalArticles = totalResultsForSource
+                            )
+                            currentState.copy(articlesBySource = updatedMap)
                         }
                     }
+
+                    is NewsResult.Error -> {
+                        _uiState.update { currentState ->
+                            val updatedMap = currentState.articlesBySource.toMutableMap()
+                            updatedMap[sourceId] = sourceStateToUpdate.copy(
+                                isLoading = false,
+                                errorMessage = result.message ?: "Error fetching articles"
+                            )
+                            currentState.copy(articlesBySource = updatedMap)
+                        }
+                    }
+
+                    is NewsResult.NetworkError -> {
+                        _uiState.update { currentState ->
+                            val updatedMap = currentState.articlesBySource.toMutableMap()
+                            updatedMap[sourceId] = sourceStateToUpdate.copy(
+                                isLoading = false,
+                                errorMessage = "Network error. Please check your connection."
+                            )
+                            currentState.copy(articlesBySource = updatedMap)
+                        }
+                    }
+
+                    is NewsResult.Loading -> {
+                    }
                 }
+            }
         }
     }
 

@@ -46,27 +46,4 @@
     <string name="search_prompt">Enter search query above</string>
     <string name="en" translatable="false">English</string>
     <string name="ar" translatable="false">اللغة العربية</string>
-    <!--    <string name="loading_category_news">Loading %s news…</string>-->
-    <!--    <string name="location_permission_required_title">Location Permission Required</string>-->
-    <!--    <string name="location_permission_required_message">To show news relevant to your current location, please grant location permission.</string>-->
-    <!--    <string name="grant_permission">Grant Permission</string>-->
-    <!--    <string name="location_permission_rationale">Location permission was denied. News for your region cannot be shown without it. Please enable it in app settings.</string>-->
-    <!--    <string name="open_settings_button">Open Settings</string>-->
-    <!--    <string name="dismiss_button">Dismiss</string>-->
-    <!--    <string name="error_fetching_news_title">Error Fetching News</string>-->
-    <!--    <string name="no_articles_for_source">No articles found for %s.</string>-->
-    <!--    <string name="no_sources_found">No news sources found for \'%s\' in your region with the selected language. Try adjusting language settings or check back later.</string>-->
-    <!--    <string name="no_title_available">Title not available</string>-->
-    <!--    <string name="by_author_prefix">By %s</string>-->
-    <!--    <string name="search_hint">Search news…</string>-->
-    <!--    <string name="clear_search">Clear search</string>-->
-    <!--    <string name="search_prompt">Enter keywords to search for news articles…</string>-->
-    <!--    <string name="no_search_results_for">No search results found for "%1$s"</string>-->
-    <!--    <string name="unnamed_source">Unnamed Source</string>-->
-    <!--    <string name="no_articles_found_for_category">No articles found for %1$s at the moment. Try refreshing or check back later.</string>-->
-    <!--    <string name="unknown_error">An unknown error occurred. Please try again.</string>-->
-    <!--    <string name="loading_source_data">Loading news…</string>-->
-    <!--    <string name="open_app_settings">Open App Settings</string>-->
-    <!--    <string name="location_permission_required_extended_message">To show news relevant to your region, this app needs access to your approximate location. Please grant permission. If you have previously denied, you may need to grant it via app settings.</string>-->
-    <!--    <string name="all_articles_loaded">You\'ve reached the end!</string>-->
 </resources>

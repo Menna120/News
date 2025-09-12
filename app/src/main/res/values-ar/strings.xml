@@ -44,27 +44,4 @@
     <string name="no_search_results_for">لا توجد نتائج بحث لـ \'%s\'.</string>
     <string name="error_fetching_news_title">خطأ في جلب عنوان الخبر.</string> <!-- Please ensure this is the correct translation for "Error fetching news title." as it seems a bit off -->
     <string name="search_prompt">أدخل استعلام البحث أعلاه</string>
-    <!--    <string name="loading_category_news">جاري تحميل أخبار %s…</string>-->
-    <!--    <string name="location_permission_required_title">إذن الموقع مطلوب</string>-->
-    <!--    <string name="location_permission_required_message">لعرض الأخبار المتعلقة بموقعك الحالي، يرجى منح إذن الموقع.</string>-->
-    <!--    <string name="grant_permission">منح الإذن</string>-->
-    <!--    <string name="location_permission_rationale">تم رفض إذن الموقع. لا يمكن عرض أخبار منطقتك بدونه. يرجى تمكينه في إعدادات التطبيق.</string>-->
-    <!--    <string name="open_settings_button">فتح الإعدادات</string>-->
-    <!--    <string name="dismiss_button">تجاهل</string>-->
-    <!--    <string name="error_fetching_news_title">خطأ في جلب الأخبار</string>-->
-    <!--    <string name="no_articles_for_source">لم يتم العثور على مقالات لـ %s.</string>-->
-    <!--    <string name="no_sources_found">لم يتم العثور على مصادر أخبار لـ \'%s\' في منطقتك باللغة المحددة. حاول ضبط إعدادات اللغة أو تحقق مرة أخرى لاحقًا.</string>-->
-    <!--    <string name="no_title_available">العنوان غير متوفر</string>-->
-    <!--    <string name="by_author_prefix">بواسطة %s</string>-->
-    <!--    <string name="search_hint">ابحث في الأخبار…</string>-->
-    <!--    <string name="clear_search">مسح البحث</string>-->
-    <!--    <string name="search_prompt">أدخل كلمات رئيسية للبحث عن مقالات إخبارية…</string>-->
-    <!--    <string name="no_search_results_for">لم يتم العثور على نتائج بحث لـ \"%1$s\"</string>-->
-    <!--    <string name="unnamed_source">مصدر غير مسمى</string>-->
-    <!--    <string name="no_articles_found_for_category">لم يتم العثور على مقالات لـ %1$s في الوقت الحالي. حاول التحديث أو تحقق مرة أخرى لاحقًا.</string>-->
-    <!--    <string name="unknown_error">حدث خطأ غير معروف. الرجاء معاودة المحاولة.</string>-->
-    <!--    <string name="loading_source_data">جاري تحميل الأخبار…</string>-->
-    <!--    <string name="open_app_settings">فتح إعدادات التطبيق</string>-->
-    <!--    <string name="location_permission_required_extended_message">لعرض الأخبار ذات الصلة بمنطقتك، يحتاج هذا التطبيق إلى الوصول إلى موقعك التقريبي. يرجى منح الإذن. إذا كنت قد رفضت سابقًا، فقد تحتاج إلى منحه عبر إعدادات التطبيق.</string>-->
-    <!--    <string name="all_articles_loaded">لقد وصلت إلى النهاية!</string>-->
 </resources>

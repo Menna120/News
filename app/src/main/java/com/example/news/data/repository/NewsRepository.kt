@@ -14,7 +14,7 @@ class NewsRepository @Inject constructor(
     suspend fun getCategorySources(category: String? = null): SourceResponse =
         newsApiService.getSources(category = category)
 
-    suspend fun getSourceNews(
+    suspend fun getSourceArticles(
         sourceId: String,
         page: Int,
         pageSize: Int
