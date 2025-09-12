@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.android.application)
@@ -6,6 +8,13 @@ plugins {
     alias(libs.plugins.google.hilt)
     alias(libs.plugins.google.ksp)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+val newsApiKey = localProperties.getProperty("NEWS_API_KEY") ?: ""
 
 android {
     namespace = "com.example.news"
@@ -19,6 +28,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "NEWS_API_KEY", "\"$newsApiKey\"")
     }
 
     androidResources {
@@ -39,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -79,6 +91,15 @@ dependencies {
 
     // Coil
     implementation(libs.coil.compose)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
+    // Google Play Services Location
+    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

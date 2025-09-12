@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">أخبار</string>
     <string name="home">الرئيسية</string>
@@ -18,8 +17,45 @@
     <string name="good_morning">صباح الخير</string>
     <string name="good_afternoon">مساء الخير</string>
     <string name="good_evening">مساء الخير</string>
-    <string name="home_intro">إليك بعض الأخبار</string>
+    <string name="home_intro">إليك بعض الأخبار لك</string>
     <string name="view_all">عرض الكل</string>
+    <string name="no_title">No Title</string>
+    <string name="unknown_source">Unknown Sources</string>
+    <string name="recently">Recently</string>
+    <string name="by_author_prefix">By %1$s</string>
+    <string name="show_options">Show Options</string>
+    <string name="article_image">Article image</string>
     <string name="no_content_available">لا يوجد محتوى متاح</string>
-    <string name="view_full_article">عرض المقالة كاملة</string>
+    <string name="view_full_article">عرض المقال كاملاً</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="no_sources_found_for_category">لم يتم العثور على مصادر أخبار لـ \'%s\'.</string>
+    <string name="loading_source_data">جاري تحميل بيانات المصدر.</string>
+    <string name="no_articles_from_source">لا توجد مقالات من \'%s\'</string>
+    <string name="all_articles_loaded_for_source">لقد وصلت لنهاية \'%s\'!</string>
+    <string name="no_search_results_for">لا توجد نتائج بحث لـ \'%s\'.</string>
+    <string name="error_fetching_news_title">خطأ في جلب عنوان الخبر.</string> <!-- Please ensure this is the correct translation for "Error fetching news title." as it seems a bit off -->
+    <string name="search_prompt">أدخل استعلام البحث أعلاه</string>
+    <!--    <string name="loading_category_news">جاري تحميل أخبار %s…</string>-->
+    <!--    <string name="location_permission_required_title">إذن الموقع مطلوب</string>-->
+    <!--    <string name="location_permission_required_message">لعرض الأخبار المتعلقة بموقعك الحالي، يرجى منح إذن الموقع.</string>-->
+    <!--    <string name="grant_permission">منح الإذن</string>-->
+    <!--    <string name="location_permission_rationale">تم رفض إذن الموقع. لا يمكن عرض أخبار منطقتك بدونه. يرجى تمكينه في إعدادات التطبيق.</string>-->
+    <!--    <string name="open_settings_button">فتح الإعدادات</string>-->
+    <!--    <string name="dismiss_button">تجاهل</string>-->
+    <!--    <string name="error_fetching_news_title">خطأ في جلب الأخبار</string>-->
+    <!--    <string name="no_articles_for_source">لم يتم العثور على مقالات لـ %s.</string>-->
+    <!--    <string name="no_sources_found">لم يتم العثور على مصادر أخبار لـ \'%s\' في منطقتك باللغة المحددة. حاول ضبط إعدادات اللغة أو تحقق مرة أخرى لاحقًا.</string>-->
+    <!--    <string name="no_title_available">العنوان غير متوفر</string>-->
+    <!--    <string name="by_author_prefix">بواسطة %s</string>-->
+    <!--    <string name="search_hint">ابحث في الأخبار…</string>-->
+    <!--    <string name="clear_search">مسح البحث</string>-->
+    <!--    <string name="search_prompt">أدخل كلمات رئيسية للبحث عن مقالات إخبارية…</string>-->
+    <!--    <string name="no_search_results_for">لم يتم العثور على نتائج بحث لـ \"%1$s\"</string>-->
+    <!--    <string name="unnamed_source">مصدر غير مسمى</string>-->
+    <!--    <string name="no_articles_found_for_category">لم يتم العثور على مقالات لـ %1$s في الوقت الحالي. حاول التحديث أو تحقق مرة أخرى لاحقًا.</string>-->
+    <!--    <string name="unknown_error">حدث خطأ غير معروف. الرجاء معاودة المحاولة.</string>-->
+    <!--    <string name="loading_source_data">جاري تحميل الأخبار…</string>-->
+    <!--    <string name="open_app_settings">فتح إعدادات التطبيق</string>-->
+    <!--    <string name="location_permission_required_extended_message">لعرض الأخبار ذات الصلة بمنطقتك، يحتاج هذا التطبيق إلى الوصول إلى موقعك التقريبي. يرجى منح الإذن. إذا كنت قد رفضت سابقًا، فقد تحتاج إلى منحه عبر إعدادات التطبيق.</string>-->
+    <!--    <string name="all_articles_loaded">لقد وصلت إلى النهاية!</string>-->
 </resources>

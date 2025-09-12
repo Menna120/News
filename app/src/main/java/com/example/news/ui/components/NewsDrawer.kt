@@ -15,12 +15,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,8 +31,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,18 +66,6 @@ fun NewsDrawer(
     val languageDropdownOptions = languageCodeToNameMap.entries.toList()
     var languageExpanded by remember { mutableStateOf(false) }
 
-    val onLanguageChangeInternal: (String) -> Unit = { code ->
-        selectedLanguageCode = code
-        onLanguagePreferenceChanged(code)
-        languageExpanded = false
-    }
-
-    val onThemeChange: (String) -> Unit = { themeValue ->
-        selectedTheme = themeValue
-        onThemePreferenceChanged(themeValue)
-        themeExpanded = false
-    }
-
     val defaultNavigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
         selectedContainerColor = Color.Transparent,
         selectedIconColor = MaterialTheme.colorScheme.onBackground,
@@ -84,7 +76,7 @@ fun NewsDrawer(
 
     val defaultOutlinedTextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.onBackground,
-        unfocusedBorderColor = MaterialTheme.colorScheme.onBackground,
+        unfocusedBorderColor = MaterialTheme.colorScheme.onBackground
     )
 
     val defaultDropdownMenuModifier = Modifier
@@ -105,12 +97,12 @@ fun NewsDrawer(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Icon(
-                painterResource(R.drawable.ic_news_logo), "", Modifier
+                painterResource(R.drawable.ic_news_logo),
+                stringResource(id = R.string.app_name),
+                Modifier
                     .fillMaxWidth()
                     .aspectRatio(2f)
-                    .background(
-                        MaterialTheme.colorScheme.onBackground
-                    ),
+                    .background(MaterialTheme.colorScheme.onBackground),
                 MaterialTheme.colorScheme.background
             )
 
@@ -131,9 +123,9 @@ fun NewsDrawer(
                 selected = currentScreen == Home::class.qualifiedName,
                 onClick = {
                     navController.navigate(Home) {
-                        launchSingleTop = true
-                        restoreState = true
-                        popUpTo(navController.graph.startDestinationId)
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
                     }
                     onCloseDrawer()
                 }
@@ -163,44 +155,25 @@ fun NewsDrawer(
                 onClick = { themeExpanded = !themeExpanded }
             )
 
-            ExposedDropdownMenuBox(
+            SettingsExposedDropdownMenu(
+                currentValue = selectedTheme,
                 expanded = themeExpanded,
-                onExpandedChange = { themeExpanded = !themeExpanded }
-            ) {
-                OutlinedTextField(
-                    value = selectedTheme,
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = {
-                        Icon(
-                            painterResource(R.drawable.ic_exposed_drop_menu),
-                            null,
-                            Modifier.rotate(if (themeExpanded) 180f else 0f)
-                        )
-                    },
-                    textStyle = defaultDropdownTextStyle,
-                    shape = defaultDropdownShape,
-                    colors = defaultOutlinedTextFieldColors,
-                    modifier = defaultDropdownMenuModifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
-                )
-                ExposedDropdownMenu(
-                    expanded = themeExpanded,
-                    containerColor = MaterialTheme.colorScheme.background,
-                    onDismissRequest = { themeExpanded = false }
-                ) {
-                    themeOptions.forEach { themeValue ->
-                        DropdownMenuItem(
-                            text = {
-                                Text(
-                                    themeValue,
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                            },
-                            onClick = { onThemeChange(themeValue) }
-                        )
-                    }
+                onExpandedChange = { themeExpanded = it },
+                onDismissRequest = { themeExpanded = false },
+                options = themeOptions,
+                onOptionSelected = { themeValue ->
+                    selectedTheme = themeValue
+                    onThemePreferenceChanged(themeValue)
+                    themeExpanded = false
+                },
+                modifier = defaultDropdownMenuModifier,
+                textFieldTextStyle = defaultDropdownTextStyle,
+                textFieldShape = defaultDropdownShape,
+                textFieldColors = defaultOutlinedTextFieldColors,
+                dropdownMenuContent = { themeValue, onOptionSelected ->
+                    Text(text = themeValue, style = MaterialTheme.typography.titleMedium)
                 }
-            }
+            )
 
             HorizontalDivider(
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -225,38 +198,78 @@ fun NewsDrawer(
                 selected = false,
                 onClick = { languageExpanded = !languageExpanded }
             )
-            ExposedDropdownMenuBox(
+
+            SettingsExposedDropdownMenu(
+                currentValue = languageCodeToNameMap[selectedLanguageCode] ?: selectedLanguageCode,
                 expanded = languageExpanded,
-                onExpandedChange = { languageExpanded = !languageExpanded }
-            ) {
-                OutlinedTextField(
-                    value = languageCodeToNameMap[selectedLanguageCode] ?: selectedLanguageCode,
-                    onValueChange = {},
-                    readOnly = true,
-                    trailingIcon = {
-                        Icon(
-                            painterResource(R.drawable.ic_exposed_drop_menu),
-                            null,
-                            Modifier.rotate(if (languageExpanded) 180f else 0f)
-                        )
-                    },
-                    textStyle = defaultDropdownTextStyle,
-                    shape = defaultDropdownShape,
-                    colors = defaultOutlinedTextFieldColors,
-                    modifier = defaultDropdownMenuModifier.menuAnchor(type = MenuAnchorType.PrimaryNotEditable)
-                )
-                ExposedDropdownMenu(
-                    expanded = languageExpanded,
-                    containerColor = MaterialTheme.colorScheme.background,
-                    onDismissRequest = { languageExpanded = false }
-                ) {
-                    languageDropdownOptions.forEach { (code, name) ->
-                        DropdownMenuItem(
-                            text = { Text(name, style = MaterialTheme.typography.titleMedium) },
-                            onClick = { onLanguageChangeInternal(code) }
-                        )
-                    }
+                onExpandedChange = { languageExpanded = it },
+                onDismissRequest = { languageExpanded = false },
+                options = languageDropdownOptions,
+                onOptionSelected = { (code, _) ->
+                    selectedLanguageCode = code
+                    onLanguagePreferenceChanged(code)
+                    languageExpanded = false
+                },
+                modifier = defaultDropdownMenuModifier,
+                textFieldTextStyle = defaultDropdownTextStyle,
+                textFieldShape = defaultDropdownShape,
+                textFieldColors = defaultOutlinedTextFieldColors,
+                dropdownMenuContent = { (_, name), onOptionSelected ->
+                    Text(text = name, style = MaterialTheme.typography.titleMedium)
                 }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <T> SettingsExposedDropdownMenu(
+    currentValue: String,
+    expanded: Boolean,
+    modifier: Modifier = Modifier,
+    onExpandedChange: (Boolean) -> Unit,
+    onDismissRequest: () -> Unit,
+    options: List<T>,
+    onOptionSelected: (T) -> Unit,
+    textFieldTextStyle: TextStyle,
+    textFieldShape: Shape,
+    textFieldColors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    dropdownMenuContent: @Composable (T, (T) -> Unit) -> Unit
+) {
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = onExpandedChange
+    ) {
+        OutlinedTextField(
+            value = currentValue,
+            onValueChange = {},
+            readOnly = true,
+            trailingIcon = {
+                Icon(
+                    painterResource(R.drawable.ic_exposed_drop_menu),
+                    stringResource(id = R.string.show_options),
+                    Modifier.rotate(if (expanded) 180f else 0f)
+                )
+            },
+            textStyle = textFieldTextStyle,
+            shape = textFieldShape,
+            colors = textFieldColors,
+            modifier = modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable)
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = onDismissRequest,
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        ) {
+            options.forEach { option ->
+                DropdownMenuItem(
+                    text = { dropdownMenuContent(option, onOptionSelected) },
+                    onClick = { onOptionSelected(option) },
+                    colors = MenuDefaults.itemColors(
+                        textColor = MaterialTheme.colorScheme.onBackground
+                    )
+                )
             }
         }
     }

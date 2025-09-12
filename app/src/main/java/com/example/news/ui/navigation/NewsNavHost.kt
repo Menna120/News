@@ -7,9 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.news.ui.screens.FullArticleScreen
-import com.example.news.ui.screens.SearchScreen
 import com.example.news.ui.screens.category.CategoryNewsScreen
 import com.example.news.ui.screens.home.HomeScreen
+import com.example.news.ui.screens.search.SearchScreen
 
 @Composable
 fun NewsNavHost(
@@ -33,8 +33,7 @@ fun NewsNavHost(
         }
 
         composable<CategoryNews> { backStackEntry ->
-            val categoryNews: CategoryNews = backStackEntry.toRoute()
-            CategoryNewsScreen(categoryName = categoryNews.categoryName) { articleUrl ->
+            CategoryNewsScreen { articleUrl ->
                 navController.navigate(FullArticle(articleUrl)) {
                     launchSingleTop = true
                     restoreState = true
