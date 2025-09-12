@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.News" parent="android:Theme.Material.NoActionBar"/>
+    <style name="Theme.News" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorAccent">@color/white</item>
+    </style>
 
     <style name="Theme.News.SplashScreen" parent="Theme.SplashScreen">
         <item name="android:colorAccent">@color/white</item>

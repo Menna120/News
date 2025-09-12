@@ -1,4 +1,4 @@
-package com.example.news.ui.screens
+package com.example.news.ui.screens.full_article
 
 import android.graphics.Bitmap
 import android.webkit.WebView

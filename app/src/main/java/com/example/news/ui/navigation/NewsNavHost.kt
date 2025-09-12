@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.news.ui.screens.FullArticleScreen
 import com.example.news.ui.screens.category.CategoryNewsScreen
+import com.example.news.ui.screens.full_article.FullArticleScreen
 import com.example.news.ui.screens.home.HomeScreen
 import com.example.news.ui.screens.search.SearchScreen
 

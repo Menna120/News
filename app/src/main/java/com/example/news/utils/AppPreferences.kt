@@ -1,37 +1,31 @@
 package com.example.news.utils
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object AppPreferences {
-    private const val PREFERENCES_FILE_KEY = "com.example.news.preferences"
-    private const val KEY_THEME_PREFERENCE = "theme_preference"
-    private const val KEY_LANGUAGE_PREFERENCE = "language_preference"
+@Singleton
+class AppPreferences @Inject constructor(
+    @get:ApplicationContext private val application: Application
+) {
+    private val preferencesFileKey = "com.example.news.preferences"
+    private val themePreferencesKey = "theme_preference"
 
-    private fun getSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(PREFERENCES_FILE_KEY, Context.MODE_PRIVATE)
+    private val getSharedPreferences: SharedPreferences =
+        application.getSharedPreferences(preferencesFileKey, Context.MODE_PRIVATE)
+
+    fun getThemePreference(): String {
+        return getSharedPreferences
+            .getString(themePreferencesKey, AppTheme.SYSTEM.value) ?: AppTheme.SYSTEM.value
     }
 
-    fun getThemePreference(context: Context): String {
-        return getSharedPreferences(context)
-            .getString(KEY_THEME_PREFERENCE, THEME_SYSTEM) ?: THEME_SYSTEM
-    }
-
-    fun saveThemePreference(context: Context, themePreference: String) {
-        getSharedPreferences(context).edit {
-            putString(KEY_THEME_PREFERENCE, themePreference)
-        }
-    }
-
-    fun getLanguagePreference(context: Context): String {
-        return getSharedPreferences(context)
-            .getString(KEY_LANGUAGE_PREFERENCE, LANG_CODE_ENGLISH) ?: LANG_CODE_ENGLISH
-    }
-
-    fun saveLanguagePreference(context: Context, languageCode: String) {
-        getSharedPreferences(context).edit {
-            putString(KEY_LANGUAGE_PREFERENCE, languageCode)
+    fun saveThemePreference(themePreference: String) {
+        getSharedPreferences.edit {
+            putString(themePreferencesKey, themePreference)
         }
     }
 }

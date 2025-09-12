@@ -31,10 +31,6 @@ android {
 
         buildConfigField("String", "NEWS_API_KEY", "\"$newsApiKey\"")
     }
-
-    androidResources {
-        generateLocaleConfig = true
-    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -82,6 +78,8 @@ dependencies {
 
     // JSON serialization
     implementation(libs.kotlinx.serialization.json)
+
+    // AppCompact
     implementation(libs.androidx.appcompat)
 
     // Hilt
@@ -97,9 +95,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
-
-    // Google Play Services Location
-    implementation(libs.play.services.location)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

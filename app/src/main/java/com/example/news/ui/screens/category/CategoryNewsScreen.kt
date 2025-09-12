@@ -41,11 +41,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.news.R
 import com.example.news.domain.model.Article
 import com.example.news.domain.model.Source
+import com.example.news.ui.components.ArticleBottomSheet
+import com.example.news.ui.components.EmptyState
+import com.example.news.ui.components.ErrorState
+import com.example.news.ui.components.LoadingState
 import com.example.news.ui.components.NewsArticleItem
-import com.example.news.ui.screens.category.components.ArticleBottomSheet
-import com.example.news.ui.screens.category.components.EmptyState
-import com.example.news.ui.screens.category.components.ErrorState
-import com.example.news.ui.screens.category.components.LoadingState
 import com.example.news.ui.screens.category.model.CategoryNewsUiState
 import com.example.news.ui.screens.category.model.SourceArticlesUiState
 import com.example.news.ui.theme.NewsTheme

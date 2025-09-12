@@ -16,6 +16,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.news.R
 import com.example.news.ui.navigation.Search
+import com.example.news.ui.theme.NewsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,11 +75,13 @@ fun NewsTopBar(
 @Preview
 @Composable
 fun NewsTopBarPreview() {
-    NewsTopBar(
-        title = "News App",
-        navController = rememberNavController(),
-        isCurrentSearchRoute = false,
-        onMenuClick = {},
-        onSendSearchQueryClick = {}
-    )
+    NewsTheme {
+        NewsTopBar(
+            title = "News App",
+            navController = rememberNavController(),
+            isCurrentSearchRoute = false,
+            onMenuClick = {},
+            onSendSearchQueryClick = {}
+        )
+    }
 }

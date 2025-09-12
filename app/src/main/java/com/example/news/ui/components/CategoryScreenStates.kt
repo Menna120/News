@@ -1,4 +1,4 @@
-package com.example.news.ui.screens.category.components
+package com.example.news.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.news.R
+import com.example.news.ui.theme.NewsTheme
 
 @Composable
 fun LoadingState(modifier: Modifier = Modifier) {
@@ -36,7 +37,7 @@ fun LoadingState(modifier: Modifier = Modifier) {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun LoadingStatePreview() {
-    LoadingState()
+    NewsTheme { LoadingState() }
 }
 
 @Composable
@@ -71,7 +72,7 @@ fun ErrorState(
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun ErrorStatePreview() {
-    ErrorState(message = "Error message", onRetry = {})
+    NewsTheme { ErrorState(message = "Error message", onRetry = {}) }
 }
 
 @Composable
@@ -94,5 +95,5 @@ fun EmptyState(modifier: Modifier = Modifier, message: String) {
 @Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
 @Composable
 fun EmptyStatePreview() {
-    EmptyState(message = "Empty state message")
+    NewsTheme { EmptyState(message = "Empty state message") }
 }

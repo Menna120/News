@@ -85,5 +85,7 @@ fun NewsSearchBar(
 @Preview
 @Composable
 fun NewsSearchBarPreview() {
-    NewsTheme { NewsSearchBar {} }
+    NewsTheme {
+        NewsSearchBar {}
+    }
 }

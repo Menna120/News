@@ -36,6 +36,7 @@ import com.example.news.domain.model.Article
 import com.example.news.domain.model.Source
 import com.example.news.ui.components.NewsArticleItem
 import com.example.news.ui.screens.search.model.SearchUiState
+import com.example.news.ui.theme.NewsTheme
 
 @Composable
 fun SearchScreen(
@@ -258,12 +259,14 @@ fun PaginationErrorItem(
 @Preview(showBackground = true, name = "Search Initial Prompt")
 @Composable
 fun SearchScreenInitialPreview() {
-    SearchScreenContent(
-        uiState = SearchUiState.Initial,
-        onLoadMore = {},
-        onRetry = {},
-        onArticleClick = {}
-    )
+    NewsTheme {
+        SearchScreenContent(
+            uiState = SearchUiState.Initial,
+            onLoadMore = {},
+            onRetry = {},
+            onArticleClick = {}
+        )
+    }
 }
 
 @Preview(showBackground = true, name = "Search Success with Pagination Error")
@@ -288,17 +291,19 @@ fun SearchScreenSuccessWithPaginationErrorPreview() {
             content = "Sample content for article ${index + 1}..."
         )
     }
-    SearchScreenContent(
-        uiState = SearchUiState.Success(
-            query = "Technology",
-            articles = sampleArticles,
-            isLoadingMore = false,
-            canLoadMore = true,
-            currentPage = 1,
-            paginationErrorMessage = "Failed to load more articles. Please check your connection."
-        ),
-        onLoadMore = {},
-        onRetry = {},
-        onArticleClick = {}
-    )
+    NewsTheme {
+        SearchScreenContent(
+            uiState = SearchUiState.Success(
+                query = "Technology",
+                articles = sampleArticles,
+                isLoadingMore = false,
+                canLoadMore = true,
+                currentPage = 1,
+                paginationErrorMessage = "Failed to load more articles. Please check your connection."
+            ),
+            onLoadMore = {},
+            onRetry = {},
+            onArticleClick = {}
+        )
+    }
 }

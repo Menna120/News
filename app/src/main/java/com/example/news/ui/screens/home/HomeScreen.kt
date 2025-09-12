@@ -1,5 +1,6 @@
 package com.example.news.ui.screens.home
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,13 +27,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.news.R
 import com.example.news.ui.theme.NewsTheme
+import com.example.news.utils.Category
 import java.util.Calendar
 
 @Composable
@@ -66,7 +70,7 @@ fun HomeScreen(
             )
         }
 
-        itemsIndexed(categories) { index, category ->
+        itemsIndexed(Category.entries) { index, category ->
             CategoryItem(
                 category = category,
                 index = index,
@@ -91,7 +95,7 @@ fun CategoryItem(
     modifier: Modifier = Modifier,
     onItemClick: (String) -> Unit,
 ) {
-    val categoryName = stringResource(category.name)
+    val categoryName = stringResource(category.title)
 
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
@@ -106,6 +110,11 @@ fun CategoryItem(
         val textAlign = if (isEven) Alignment.TopEnd else Alignment.TopStart
         val buttonAlign = if (isEven) Alignment.BottomEnd else Alignment.BottomStart
 
+        val layoutDirection = LocalLayoutDirection.current
+        val imageModifier = if (layoutDirection == LayoutDirection.Rtl) {
+            Modifier.graphicsLayer { rotationY = 180f }
+        } else Modifier
+
         Box(
             modifier = Modifier
                 .height(200.dp)
@@ -114,7 +123,7 @@ fun CategoryItem(
             Image(
                 painter = painterResource(id = category.iconResId),
                 contentDescription = categoryName,
-                modifier = Modifier
+                modifier = imageModifier
                     .fillMaxHeight()
                     .align(imageAlign),
                 contentScale = ContentScale.Fit
@@ -132,7 +141,7 @@ fun CategoryItem(
             )
 
             Button(
-                onClick = { onItemClick(categoryName) },
+                onClick = { onItemClick(category.name.lowercase()) },
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(.5f)
@@ -168,12 +177,14 @@ fun CategoryItem(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL)
+@Preview(locale = "ar")
 @Composable
 fun CategoryItemPreview() {
     NewsTheme {
         CategoryItem(
-            category = categories[0],
+            category = Category.GENERAL,
             index = 0,
             onItemClick = {}
         )

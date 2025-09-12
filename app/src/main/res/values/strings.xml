@@ -5,6 +5,9 @@
     <string name="back">Back</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="theme">Theme</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_theme">System</string>
     <string name="language">Language</string>
     <string name="general">General</string>
     <string name="business">Business</string>
@@ -22,6 +25,12 @@
     <string name="no_title">No Title</string>
     <string name="unknown_source">Unknown Sources</string>
     <string name="recently">Recently</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="days_ago">%s days ago</string>
+    <string name="weeks_ago">%s weeks ago</string>
+    <string name="months_ago">%s months ago</string>
+    <string name="since_year">since a year</string>
+    <string name="years_ago">%s years ago</string>
     <string name="by_author_prefix">By %1$s</string>
     <string name="show_options">Show Options</string>
     <string name="article_image">Article image</string>
@@ -35,6 +44,8 @@
     <string name="no_search_results_for">No Search Results For \'%s\'.</string>
     <string name="error_fetching_news_title">Error Fetching News Title.</string>
     <string name="search_prompt">Enter search query above</string>
+    <string name="en" translatable="false">English</string>
+    <string name="ar" translatable="false">اللغة العربية</string>
     <!--    <string name="loading_category_news">Loading %s news…</string>-->
     <!--    <string name="location_permission_required_title">Location Permission Required</string>-->
     <!--    <string name="location_permission_required_message">To show news relevant to your current location, please grant location permission.</string>-->

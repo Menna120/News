@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -43,10 +44,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.news.R
 import com.example.news.ui.navigation.Home
-import com.example.news.utils.THEME_DARK
-import com.example.news.utils.THEME_LIGHT
-import com.example.news.utils.THEME_SYSTEM
-import com.example.news.utils.languageCodeToNameMap
+import com.example.news.ui.theme.NewsTheme
+import com.example.news.utils.AppLanguage
+import com.example.news.utils.AppLanguage.Companion.toAppLanguage
+import com.example.news.utils.AppTheme
+import com.example.news.utils.AppTheme.Companion.toAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,12 +60,14 @@ fun NewsDrawer(
     onLanguagePreferenceChanged: (String) -> Unit,
     onCloseDrawer: () -> Unit
 ) {
-    var selectedTheme by remember(currentThemePreference) { mutableStateOf(currentThemePreference) }
-    val themeOptions = listOf(THEME_SYSTEM, THEME_LIGHT, THEME_DARK)
+    var selectedThemeResId by remember(currentThemePreference) {
+        mutableIntStateOf(currentThemePreference.toAppTheme().stringResId)
+    }
     var themeExpanded by remember { mutableStateOf(false) }
 
-    var selectedLanguageCode by remember(currentLanguageCode) { mutableStateOf(currentLanguageCode) }
-    val languageDropdownOptions = languageCodeToNameMap.entries.toList()
+    var selectedLanguageResId by remember(currentLanguageCode) {
+        mutableIntStateOf(currentLanguageCode.toAppLanguage().stringResId)
+    }
     var languageExpanded by remember { mutableStateOf(false) }
 
     val defaultNavigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
@@ -156,24 +160,22 @@ fun NewsDrawer(
             )
 
             SettingsExposedDropdownMenu(
-                currentValue = selectedTheme,
+                currentValue = selectedThemeResId,
                 expanded = themeExpanded,
                 onExpandedChange = { themeExpanded = it },
                 onDismissRequest = { themeExpanded = false },
-                options = themeOptions,
-                onOptionSelected = { themeValue ->
-                    selectedTheme = themeValue
-                    onThemePreferenceChanged(themeValue)
+                options = AppTheme.entries.map { it.stringResId },
+                onOptionSelected = { themeRes ->
+                    onThemePreferenceChanged(themeRes.toAppTheme().value)
                     themeExpanded = false
                 },
                 modifier = defaultDropdownMenuModifier,
                 textFieldTextStyle = defaultDropdownTextStyle,
                 textFieldShape = defaultDropdownShape,
                 textFieldColors = defaultOutlinedTextFieldColors,
-                dropdownMenuContent = { themeValue, onOptionSelected ->
-                    Text(text = themeValue, style = MaterialTheme.typography.titleMedium)
-                }
-            )
+            ) {
+                Text(text = stringResource(it), style = MaterialTheme.typography.titleMedium)
+            }
 
             HorizontalDivider(
                 modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
@@ -200,49 +202,45 @@ fun NewsDrawer(
             )
 
             SettingsExposedDropdownMenu(
-                currentValue = languageCodeToNameMap[selectedLanguageCode] ?: selectedLanguageCode,
+                currentValue = selectedLanguageResId,
                 expanded = languageExpanded,
                 onExpandedChange = { languageExpanded = it },
                 onDismissRequest = { languageExpanded = false },
-                options = languageDropdownOptions,
-                onOptionSelected = { (code, _) ->
-                    selectedLanguageCode = code
-                    onLanguagePreferenceChanged(code)
+                options = AppLanguage.entries.map { it.stringResId },
+                onOptionSelected = { languageRes ->
+                    onLanguagePreferenceChanged(languageRes.toAppLanguage().code)
                     languageExpanded = false
                 },
                 modifier = defaultDropdownMenuModifier,
                 textFieldTextStyle = defaultDropdownTextStyle,
                 textFieldShape = defaultDropdownShape,
                 textFieldColors = defaultOutlinedTextFieldColors,
-                dropdownMenuContent = { (_, name), onOptionSelected ->
-                    Text(text = name, style = MaterialTheme.typography.titleMedium)
-                }
-            )
+            ) { Text(text = stringResource(it), style = MaterialTheme.typography.titleMedium) }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T> SettingsExposedDropdownMenu(
-    currentValue: String,
+fun SettingsExposedDropdownMenu(
+    currentValue: Int,
     expanded: Boolean,
     modifier: Modifier = Modifier,
     onExpandedChange: (Boolean) -> Unit,
     onDismissRequest: () -> Unit,
-    options: List<T>,
-    onOptionSelected: (T) -> Unit,
+    options: List<Int>,
+    onOptionSelected: (Int) -> Unit,
     textFieldTextStyle: TextStyle,
     textFieldShape: Shape,
     textFieldColors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
-    dropdownMenuContent: @Composable (T, (T) -> Unit) -> Unit
+    dropdownMenuContent: @Composable (Int) -> Unit
 ) {
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = onExpandedChange
     ) {
         OutlinedTextField(
-            value = currentValue,
+            value = stringResource(currentValue),
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
@@ -264,7 +262,7 @@ fun <T> SettingsExposedDropdownMenu(
         ) {
             options.forEach { option ->
                 DropdownMenuItem(
-                    text = { dropdownMenuContent(option, onOptionSelected) },
+                    text = { dropdownMenuContent(option) },
                     onClick = { onOptionSelected(option) },
                     colors = MenuDefaults.itemColors(
                         textColor = MaterialTheme.colorScheme.onBackground
@@ -277,16 +275,19 @@ fun <T> SettingsExposedDropdownMenu(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
+@Preview(locale = "ar")
 @Composable
 fun AppDrawerContentPreview() {
     val navController = rememberNavController()
 
-    NewsDrawer(
-        navController = navController,
-        currentThemePreference = THEME_SYSTEM,
-        onThemePreferenceChanged = {},
-        currentLanguageCode = "en",
-        onLanguagePreferenceChanged = {},
-        onCloseDrawer = {}
-    )
+    NewsTheme {
+        NewsDrawer(
+            navController = navController,
+            currentThemePreference = stringResource(R.string.system_theme),
+            onThemePreferenceChanged = {},
+            currentLanguageCode = "en",
+            onLanguagePreferenceChanged = {},
+            onCloseDrawer = {}
+        )
+    }
 }

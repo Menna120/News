@@ -1,5 +1,6 @@
 package com.example.news.ui.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,9 +30,9 @@ import com.example.news.R
 import com.example.news.domain.model.Article
 import com.example.news.domain.model.Source
 import com.example.news.ui.theme.NewsTheme
+import java.text.NumberFormat
+import java.time.Duration
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
 
 @Composable
 fun NewsArticleItem(
@@ -40,14 +42,9 @@ fun NewsArticleItem(
 ) {
     val title = article.title ?: stringResource(R.string.no_title)
     val imageUrl = article.urlToImage
-    val sourceName = article.source?.name ?: stringResource(R.string.unknown_source)
-    val publishedTime =
-        article.publishedAt?.formatPublishedDate() ?: stringResource(R.string.recently)
-    val authors = article.author?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }
-    val displayAuthor = if (authors.isNullOrEmpty()) sourceName else stringResource(
-        R.string.by_author_prefix,
-        authors.joinToString()
-    )
+    val publishedTime = article.publishedAt?.formatPublishedDate() ?: "_"
+    val displayAuthor =
+        article.author?.let { stringResource(R.string.by_author_prefix, article.author) } ?: "_"
 
     OutlinedCard(
         modifier = modifier
@@ -113,15 +110,45 @@ fun NewsArticleItem(
 
 @Composable
 fun String.formatPublishedDate(): String {
-    return try {
-        val zonedDateTime = ZonedDateTime.parse(this)
-        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(zonedDateTime)
-    } catch (_: Exception) {
-        stringResource(R.string.recently)
+    val now = ZonedDateTime.now()
+    val zonedDateTime = ZonedDateTime.parse(this)
+    val duration = Duration.between(zonedDateTime, now)
+
+    val currentLocale = LocalResources.current.configuration.locales[0]
+    val numberFormat = NumberFormat.getInstance(currentLocale)
+
+    return when {
+        duration.toDays() == 0L -> stringResource(R.string.recently)
+        duration.toDays() == 1L -> stringResource(R.string.yesterday)
+        duration.toDays() < 7L -> stringResource(
+            R.string.days_ago,
+            numberFormat.format(duration.toDays())
+        )
+
+        duration.toDays() < 30L -> stringResource(
+            R.string.weeks_ago,
+            numberFormat.format(duration.toDays() / 7)
+        )
+
+        duration.toDays() < 365L -> stringResource(
+            R.string.months_ago,
+            numberFormat.format(duration.toDays() / 30)
+        )
+
+        duration.toDays() == 365L -> stringResource(
+            R.string.since_year,
+            numberFormat.format(duration.toDays() / 365)
+        )
+
+        else -> stringResource(
+            R.string.years_ago, numberFormat.format(duration.toDays() / 365)
+        )
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview
+@Preview(locale = "ar")
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun NewsArticleItemPreview() {
     val article = Article(

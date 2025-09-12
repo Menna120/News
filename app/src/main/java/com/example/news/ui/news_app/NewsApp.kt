@@ -22,10 +22,10 @@ import com.example.news.ui.components.NewsDrawer
 import com.example.news.ui.components.NewsTopBar
 import com.example.news.ui.navigation.CategoryNews
 import com.example.news.ui.navigation.FullArticle
-import com.example.news.ui.navigation.Home
 import com.example.news.ui.navigation.NewsNavHost
 import com.example.news.ui.navigation.Search
 import com.example.news.ui.theme.NewsTheme
+import com.example.news.utils.Category.Companion.toCategory
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,9 +44,11 @@ fun NewsApp(viewModel: NewsAppViewModel = hiltViewModel()) {
     val currentRoute = currentBackStackEntry?.destination?.route
 
     val topBarTitle = when (currentRoute) {
-        Home::class.qualifiedName -> stringResource(id = R.string.home)
-        CategoryNews::class.qualifiedName + "/{categoryName}" -> currentBackStackEntry!!.toRoute<CategoryNews>().categoryName
-        else -> stringResource(id = R.string.app_name)
+        CategoryNews::class.qualifiedName + "/{categoryName}" -> stringResource(
+            currentBackStackEntry!!.toRoute<CategoryNews>().categoryName.toCategory().title
+        )
+
+        else -> stringResource(id = R.string.home)
     }
 
     NewsTheme(themePreference = themePreference) {
@@ -56,9 +58,9 @@ fun NewsApp(viewModel: NewsAppViewModel = hiltViewModel()) {
                 NewsDrawer(
                     navController = navController,
                     currentThemePreference = themePreference,
-                    onThemePreferenceChanged = { viewModel.updateThemePreference(it) },
+                    onThemePreferenceChanged = viewModel::updateThemePreference,
                     currentLanguageCode = languagePreferenceCode,
-                    onLanguagePreferenceChanged = { viewModel.updateLanguagePreferenceCode(it) },
+                    onLanguagePreferenceChanged = viewModel::updateLanguagePreferenceCode,
                     onCloseDrawer = { scope.launch { drawerState.close() } }
                 )
             },
