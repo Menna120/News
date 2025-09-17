@@ -54,14 +54,14 @@ import com.example.news.utils.AppTheme.Companion.toAppTheme
 @Composable
 fun NewsDrawer(
     navController: NavController,
-    currentThemePreference: String,
-    onThemePreferenceChanged: (String) -> Unit,
+    currentTheme: String,
+    onThemeChanged: (String) -> Unit,
     currentLanguageCode: String,
-    onLanguagePreferenceChanged: (String) -> Unit,
+    onLanguageChanged: (String) -> Unit,
     onCloseDrawer: () -> Unit
 ) {
-    var selectedThemeResId by remember(currentThemePreference) {
-        mutableIntStateOf(currentThemePreference.toAppTheme().stringResId)
+    var selectedThemeResId by remember(currentTheme) {
+        mutableIntStateOf(currentTheme.toAppTheme().stringResId)
     }
     var themeExpanded by remember { mutableStateOf(false) }
 
@@ -166,7 +166,7 @@ fun NewsDrawer(
                 onDismissRequest = { themeExpanded = false },
                 options = AppTheme.entries.map { it.stringResId },
                 onOptionSelected = { themeRes ->
-                    onThemePreferenceChanged(themeRes.toAppTheme().value)
+                    onThemeChanged(themeRes.toAppTheme().value)
                     themeExpanded = false
                 },
                 modifier = defaultDropdownMenuModifier,
@@ -208,14 +208,16 @@ fun NewsDrawer(
                 onDismissRequest = { languageExpanded = false },
                 options = AppLanguage.entries.map { it.stringResId },
                 onOptionSelected = { languageRes ->
-                    onLanguagePreferenceChanged(languageRes.toAppLanguage().code)
+                    onLanguageChanged(languageRes.toAppLanguage().code)
                     languageExpanded = false
                 },
                 modifier = defaultDropdownMenuModifier,
                 textFieldTextStyle = defaultDropdownTextStyle,
                 textFieldShape = defaultDropdownShape,
                 textFieldColors = defaultOutlinedTextFieldColors,
-            ) { Text(text = stringResource(it), style = MaterialTheme.typography.titleMedium) }
+            ) {
+                Text(text = stringResource(it), style = MaterialTheme.typography.titleMedium)
+            }
         }
     }
 }
@@ -283,10 +285,10 @@ fun AppDrawerContentPreview() {
     NewsTheme {
         NewsDrawer(
             navController = navController,
-            currentThemePreference = stringResource(R.string.system_theme),
-            onThemePreferenceChanged = {},
+            currentTheme = stringResource(R.string.system_theme),
+            onThemeChanged = {},
             currentLanguageCode = "en",
-            onLanguagePreferenceChanged = {},
+            onLanguageChanged = {},
             onCloseDrawer = {}
         )
     }

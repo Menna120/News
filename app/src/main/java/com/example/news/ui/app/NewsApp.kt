@@ -1,4 +1,4 @@
-package com.example.news.ui.news_app
+package com.example.news.ui.app
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,8 +32,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun NewsApp(viewModel: NewsAppViewModel = hiltViewModel()) {
 
-    val themePreference by viewModel.themePreference.collectAsState()
-    val languagePreferenceCode by viewModel.languagePreferenceCode.collectAsState()
+    val theme by viewModel.theme.collectAsState()
+    val languageCode by viewModel.languageCode.collectAsState()
     val appBarSearchQuery by viewModel.appBarSearchQuery.collectAsState()
 
     val navController = rememberNavController()
@@ -51,16 +51,16 @@ fun NewsApp(viewModel: NewsAppViewModel = hiltViewModel()) {
         else -> stringResource(id = R.string.home)
     }
 
-    NewsTheme(themePreference = themePreference) {
+    NewsTheme(theme = theme) {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
                 NewsDrawer(
                     navController = navController,
-                    currentThemePreference = themePreference,
-                    onThemePreferenceChanged = viewModel::updateThemePreference,
-                    currentLanguageCode = languagePreferenceCode,
-                    onLanguagePreferenceChanged = viewModel::updateLanguagePreferenceCode,
+                    currentTheme = theme,
+                    onThemeChanged = viewModel::updateTheme,
+                    currentLanguageCode = languageCode,
+                    onLanguageChanged = viewModel::updateLanguageCode,
                     onCloseDrawer = { scope.launch { drawerState.close() } }
                 )
             },
@@ -82,8 +82,8 @@ fun NewsApp(viewModel: NewsAppViewModel = hiltViewModel()) {
             ) { innerPadding ->
                 NewsNavHost(
                     navController = navController,
-                    modifier = Modifier.padding(innerPadding),
-                    searchQueryFromMain = appBarSearchQuery
+                    searchQueryFromMain = appBarSearchQuery,
+                    modifier = Modifier.padding(innerPadding)
                 )
             }
         }

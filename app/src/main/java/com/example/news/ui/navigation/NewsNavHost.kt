@@ -14,8 +14,8 @@ import com.example.news.ui.screens.search.SearchScreen
 @Composable
 fun NewsNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    searchQueryFromMain: String
+    searchQueryFromMain: String,
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
@@ -42,16 +42,14 @@ fun NewsNavHost(
         }
 
         composable<FullArticle> { backStackEntry ->
-            val article: FullArticle = backStackEntry.toRoute()
+            val fullArticle: FullArticle = backStackEntry.toRoute()
 
-            FullArticleScreen(article.articleUrl)
+            FullArticleScreen(fullArticle.articleUrl)
         }
 
         composable<Search> { backStackEntry ->
             SearchScreen(searchQueryFromMain) { articleUrl ->
-                navController.navigate(
-                    FullArticle(articleUrl)
-                ) {
+                navController.navigate(FullArticle(articleUrl)) {
                     launchSingleTop = true
                     restoreState = true
                 }

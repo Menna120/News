@@ -25,11 +25,11 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun NewsTheme(
-    themePreference: String = AppTheme.SYSTEM.value,
+    theme: String = AppTheme.SYSTEM.value,
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val useDarkTheme = when (themePreference) {
+    val useDarkTheme = when (theme) {
         AppTheme.LIGHT.value -> false
         AppTheme.DARK.value -> true
         else -> isSystemInDarkTheme()
