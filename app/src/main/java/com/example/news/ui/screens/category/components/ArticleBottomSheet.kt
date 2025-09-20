@@ -1,4 +1,4 @@
-package com.example.news.ui.components
+package com.example.news.ui.screens.category.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background

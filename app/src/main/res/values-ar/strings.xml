@@ -42,6 +42,9 @@
     <string name="no_articles_from_source">لا توجد مقالات من \'%s\'</string>
     <string name="all_articles_loaded_for_source">لقد وصلت لنهاية \'%s\'!</string>
     <string name="no_search_results_for">لا توجد نتائج بحث لـ \'%s\'.</string>
-    <string name="error_fetching_news_title">خطأ في جلب عنوان الخبر.</string> <!-- Please ensure this is the correct translation for "Error fetching news title." as it seems a bit off -->
+    <string name="error_fetching_news_title">خطأ في تحميل عنوان الخبر.</string>
     <string name="search_prompt">أدخل استعلام البحث أعلاه</string>
+    <string name="unknown_error_occurred">حدث خطأ غير معروف</string>
+    <string name="error_loading_more_articles">خطأ في تحميل المزيد من المقالات</string>
+    <string name="error_loading_articles">خطأ في تحميل المقالات</string>
 </resources>

@@ -46,4 +46,7 @@
     <string name="search_prompt">Enter search query above</string>
     <string name="en" translatable="false">English</string>
     <string name="ar" translatable="false">اللغة العربية</string>
+    <string name="unknown_error_occurred">Unknown Error Occurred</string>
+    <string name="error_loading_more_articles">Error Loading More Articles</string>
+    <string name="error_loading_articles">Error Loading Articles</string>
 </resources>

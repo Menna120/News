@@ -5,9 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.example.news.ui.screens.category.CategoryNewsScreen
-import com.example.news.ui.screens.full_article.FullArticleScreen
 import com.example.news.ui.screens.home.HomeScreen
 import com.example.news.ui.screens.search.SearchScreen
 
@@ -32,28 +30,12 @@ fun NewsNavHost(
             }
         }
 
-        composable<CategoryNews> { backStackEntry ->
-            CategoryNewsScreen { articleUrl ->
-                navController.navigate(FullArticle(articleUrl)) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
+        composable<CategoryNews> {
+            CategoryNewsScreen()
         }
 
-        composable<FullArticle> { backStackEntry ->
-            val fullArticle: FullArticle = backStackEntry.toRoute()
-
-            FullArticleScreen(fullArticle.articleUrl)
-        }
-
-        composable<Search> { backStackEntry ->
-            SearchScreen(searchQueryFromMain) { articleUrl ->
-                navController.navigate(FullArticle(articleUrl)) {
-                    launchSingleTop = true
-                    restoreState = true
-                }
-            }
+        composable<Search> {
+            SearchScreen(searchQueryFromMain)
         }
     }
 }

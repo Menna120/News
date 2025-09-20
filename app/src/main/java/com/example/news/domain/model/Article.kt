@@ -12,4 +12,17 @@ data class Article(
     val urlToImage: String?,
     val publishedAt: String?,
     val content: String?
-)
+) : java.io.Serializable {
+    companion object {
+        val empty = Article(
+            source = null,
+            author = null,
+            title = "",
+            description = null,
+            url = "",
+            urlToImage = null,
+            publishedAt = "",
+            content = null
+        )
+    }
+}

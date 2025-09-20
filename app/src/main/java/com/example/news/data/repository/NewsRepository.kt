@@ -1,8 +1,14 @@
 package com.example.news.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.example.news.data.remote.NETWORK_PAGE_SIZE
 import com.example.news.data.remote.NewsApiService
-import com.example.news.data.remote.model.NewsResponse
+import com.example.news.data.remote.NewsPagingSource
 import com.example.news.data.remote.model.SourceResponse
+import com.example.news.domain.model.Article
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,29 +20,31 @@ class NewsRepository @Inject constructor(
     suspend fun getCategorySources(category: String? = null): SourceResponse =
         newsApiService.getSources(category = category)
 
-    suspend fun getSourceArticles(
-        sourceId: String,
-        page: Int,
-        pageSize: Int
-    ): NewsResponse {
-        return newsApiService.getNews(
-            sources = sourceId,
-            page = page,
-            pageSize = pageSize
-        )
+    fun getArticlesBySourceStream(sourceId: String): Flow<PagingData<Article>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                NewsPagingSource(newsApiService = newsApiService, sources = sourceId)
+            }
+        ).flow
     }
 
-    suspend fun searchNews(
-        query: String,
-        sortBy: String? = null,
-        pageSize: Int? = null,
-        page: Int? = null
-    ): NewsResponse {
-        return newsApiService.getNews(
-            query = query,
-            sortBy = sortBy,
-            pageSize = pageSize,
-            page = page
-        )
+    fun searchNewsStream(query: String, sortBy: String? = null): Flow<PagingData<Article>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = NETWORK_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = {
+                NewsPagingSource(
+                    newsApiService = newsApiService,
+                    query = query,
+                    sortBy = sortBy
+                )
+            }
+        ).flow
     }
 }

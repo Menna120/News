@@ -21,7 +21,6 @@ import com.example.news.R
 import com.example.news.ui.components.NewsDrawer
 import com.example.news.ui.components.NewsTopBar
 import com.example.news.ui.navigation.CategoryNews
-import com.example.news.ui.navigation.FullArticle
 import com.example.news.ui.navigation.NewsNavHost
 import com.example.news.ui.navigation.Search
 import com.example.news.ui.theme.NewsTheme
@@ -63,21 +62,18 @@ fun NewsApp(viewModel: NewsAppViewModel = hiltViewModel()) {
                     onLanguageChanged = viewModel::updateLanguageCode,
                     onCloseDrawer = { scope.launch { drawerState.close() } }
                 )
-            },
-            gesturesEnabled = currentRoute != FullArticle::class.qualifiedName + "/{articleUrl}"
+            }
         ) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 topBar = {
-                    if (currentRoute != FullArticle::class.qualifiedName + "/{articleUrl}") {
-                        NewsTopBar(
-                            title = topBarTitle,
-                            navController = navController,
-                            isCurrentSearchRoute = currentRoute == Search::class.qualifiedName,
-                            onMenuClick = { scope.launch { drawerState.open() } },
-                            onSendSearchQueryClick = { viewModel.updateAppBarSearchQuery(it) }
-                        )
-                    }
+                    NewsTopBar(
+                        title = topBarTitle,
+                        navController = navController,
+                        isCurrentSearchRoute = currentRoute == Search::class.qualifiedName,
+                        onMenuClick = { scope.launch { drawerState.open() } },
+                        onSendSearchQueryClick = { viewModel.updateAppBarSearchQuery(it) }
+                    )
                 }
             ) { innerPadding ->
                 NewsNavHost(

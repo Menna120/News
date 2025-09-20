@@ -1,4 +1,4 @@
-package com.example.news.ui.components
+package com.example.news.ui.screens.category.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

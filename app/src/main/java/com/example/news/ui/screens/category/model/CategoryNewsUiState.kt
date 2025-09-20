@@ -7,6 +7,5 @@ data class CategoryNewsUiState(
     val isLoadingSources: Boolean = true,
     val sources: List<Source> = emptyList(),
     val selectedSourceId: String? = null,
-    val articlesBySource: Map<String, SourceArticlesUiState> = emptyMap(),
     val globalErrorMessage: String? = null
 )

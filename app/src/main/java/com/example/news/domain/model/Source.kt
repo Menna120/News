@@ -11,4 +11,4 @@ data class Source(
     val category: String? = null,
     val language: String? = null,
     val country: String? = null
-)
+) : java.io.Serializable
