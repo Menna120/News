@@ -33,7 +33,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.news.R
 import com.example.news.domain.model.Article
@@ -46,6 +45,7 @@ import com.example.news.ui.screens.category.components.SourceArticlePage
 import com.example.news.ui.screens.category.model.CategoryNewsUiState
 import com.example.news.ui.theme.NewsTheme
 import com.example.news.utils.OpenUrlInExternalBrowser
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
@@ -57,7 +57,6 @@ fun CategoryNewsScreen(
     viewModel: CategoryNewsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val articlesPagingItems = viewModel.articlesPagingData.collectAsLazyPagingItems()
     val context = LocalContext.current
 
     var showSheet by remember { mutableStateOf(false) }
@@ -66,7 +65,7 @@ fun CategoryNewsScreen(
     CategoryNewsContent(
         modifier = modifier,
         uiState = uiState,
-        articlesPagingItems = articlesPagingItems,
+        getArticlesForSource = viewModel::getArticlesForSource,
         onArticleClicked = { article ->
             selectedArticle = article
             showSheet = true
@@ -92,7 +91,7 @@ fun CategoryNewsScreen(
 fun CategoryNewsContent(
     modifier: Modifier = Modifier,
     uiState: CategoryNewsUiState,
-    articlesPagingItems: LazyPagingItems<Article>,
+    getArticlesForSource: (String) -> Flow<PagingData<Article>>,
     onArticleClicked: (Article) -> Unit,
     onRetrySources: () -> Unit,
     onSourceSelected: (String) -> Unit
@@ -192,6 +191,8 @@ fun CategoryNewsContent(
                 ) { pageIndex ->
                     val source = uiState.sources.getOrNull(pageIndex)
                     if (source?.id != null) {
+                        val articlesPagingItems =
+                            getArticlesForSource(source.id).collectAsLazyPagingItems()
                         SourceArticlePage(
                             sourceName = source.name ?: stringResource(R.string.unknown_source),
                             articlesPagingItems = articlesPagingItems,
@@ -218,13 +219,12 @@ fun CategoryNewsContent(
 @Composable
 fun CategoryNewsContentPreview_LoadingSources() {
     NewsTheme {
-        val emptyPagingItems = emptyFlow<PagingData<Article>>().collectAsLazyPagingItems()
         CategoryNewsContent(
             uiState = CategoryNewsUiState(
                 categoryDisplayName = "Tech",
                 isLoadingSources = true
             ),
-            articlesPagingItems = emptyPagingItems,
+            getArticlesForSource = { emptyFlow() },
             onArticleClicked = {},
             onRetrySources = {},
             onSourceSelected = {}
@@ -236,7 +236,6 @@ fun CategoryNewsContentPreview_LoadingSources() {
 @Composable
 fun CategoryNewsContentPreview_GlobalError() {
     NewsTheme {
-        val emptyPagingItems = emptyFlow<PagingData<Article>>().collectAsLazyPagingItems()
         CategoryNewsContent(
             uiState = CategoryNewsUiState(
                 categoryDisplayName = "Science",
@@ -244,7 +243,7 @@ fun CategoryNewsContentPreview_GlobalError() {
                 sources = emptyList(),
                 globalErrorMessage = "Network error fetching sources."
             ),
-            articlesPagingItems = emptyPagingItems,
+            getArticlesForSource = { emptyFlow() },
             onArticleClicked = {},
             onRetrySources = {},
             onSourceSelected = {}
@@ -256,7 +255,6 @@ fun CategoryNewsContentPreview_GlobalError() {
 @Composable
 fun CategoryNewsContentPreview_NoSources() {
     NewsTheme {
-        val emptyPagingItems = emptyFlow<PagingData<Article>>().collectAsLazyPagingItems()
         CategoryNewsContent(
             uiState = CategoryNewsUiState(
                 categoryDisplayName = "Lifestyle",
@@ -264,7 +262,7 @@ fun CategoryNewsContentPreview_NoSources() {
                 sources = emptyList(),
                 globalErrorMessage = null
             ),
-            articlesPagingItems = emptyPagingItems,
+            getArticlesForSource = { emptyFlow() },
             onArticleClicked = {},
             onRetrySources = {},
             onSourceSelected = {}
@@ -278,7 +276,6 @@ fun CategoryNewsContentPreview_WithSources() {
     val sampleSource1 = Source(id = "cnn", name = "CNN")
     val sampleSource2 = Source(id = "bbc", name = "BBC News")
     NewsTheme {
-        val emptyPagingItems = emptyFlow<PagingData<Article>>().collectAsLazyPagingItems()
         CategoryNewsContent(
             uiState = CategoryNewsUiState(
                 categoryDisplayName = "General",
@@ -286,7 +283,7 @@ fun CategoryNewsContentPreview_WithSources() {
                 sources = listOf(sampleSource1, sampleSource2),
                 selectedSourceId = "cnn"
             ),
-            articlesPagingItems = emptyPagingItems,
+            getArticlesForSource = { emptyFlow() },
             onArticleClicked = {},
             onRetrySources = {},
             onSourceSelected = {}

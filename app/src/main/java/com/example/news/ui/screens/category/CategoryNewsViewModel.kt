@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.filter
-import androidx.paging.map
 import com.example.news.domain.model.Article
 import com.example.news.domain.model.NewsResult
 import com.example.news.domain.usecase.GetCategorySourcesUseCase
@@ -19,12 +17,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -38,25 +33,19 @@ class CategoryNewsViewModel @Inject constructor(
     private val categoryName: String = savedStateHandle.get<String>("categoryName") ?: ""
 
     private val _uiState =
-        MutableStateFlow(CategoryNewsUiState(categoryDisplayName = categoryName.replaceFirstChar { it.uppercase() }))
+        MutableStateFlow(
+            CategoryNewsUiState(
+                categoryDisplayName = categoryName.replaceFirstChar { it.uppercase() })
+        )
     val uiState: StateFlow<CategoryNewsUiState> = _uiState.asStateFlow()
 
-    val articlesPagingData: Flow<PagingData<Article>> = uiState
-        .map { it.selectedSourceId }
-        .filterNotNull()
-        .distinctUntilChanged()
-        .flatMapLatest { sourceId ->
-            getSourceArticlesUseCase(sourceId)
-                .map { pagingData ->
-                    pagingData.map { article ->
-                        article.validateArticle() ?: Article.empty
-                    }
-                }
-                .map { pagingData ->
-                    pagingData.filter { it != Article.empty }
-                }
+    private val articlesPagingDataCache = ConcurrentHashMap<String, Flow<PagingData<Article>>>()
+
+    fun getArticlesForSource(sourceId: String): Flow<PagingData<Article>> {
+        return articlesPagingDataCache.getOrPut(sourceId) {
+            getSourceArticlesUseCase(sourceId).cachedIn(viewModelScope)
         }
-        .cachedIn(viewModelScope)
+    }
 
     init {
         fetchSourcesForCategory()
@@ -107,13 +96,4 @@ class CategoryNewsViewModel @Inject constructor(
     }
 
     fun retryFetchingSources() = fetchSourcesForCategory()
-
-    private fun Article.validateArticle(): Article? {
-        if (this.url.isNullOrBlank()
-            || this.title.isNullOrBlank()
-            || this.source?.id.isNullOrBlank()
-            || this.source.name.isNullOrBlank()
-        ) return null
-        return this
-    }
 }
